@@ -10,4 +10,33 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+main {
+  max-width: 1100px;
+  margin: auto;
+}
 
+main > section {
+  width: 100%
+}
+
+main > section:first-child {
+  width: 80%
+}
+
+button {
+  background-color: #004E8F;
+  color: #fff;
+
+  height: 40px;
+  min-width: 166px;
+  font-weight: bold;
+  border-radius: 4px;
+  border: none;
+
+  transition: filter 0.2s;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(0.96);
+}
