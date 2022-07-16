@@ -1,41 +1,152 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <link rel="stylesheet" href="styles.css">
+  <meta http-equiv="X-UA-Compatible"
+    content="IE=edge">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet"
+    href="styles.css">
 
   <title>Trabalho final</title>
-  
+
 </head>
+
 <body>
-<main> 
-  <section id="login" class="login">
-    <button>Voltar</button>
-     
-  </section>
-  <section id="register-user" class="register-user">
+  <main>
+    <section id="login"
+      class="login">
 
-  </section> 
-  <section id="register-job" class="register-job">
-         
-  </section>
-  <section id="home-recruiter" class="home-recruiter">
+    </section>
+    <section id="register-user"
+      class="register-user">
 
-  </section>
-  <section id="home-recruiter" class="home-job">
-     
-  </section>
-  <section id="job-description-recruiter" class="job-description-recruiter">
-              
-  </section>
-  <section id="job-description-user" class="job-description-user">
-    
-  </section>
-</main>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js%22%3E"></script>
-<script src="index.js"></script>
+    </section>
+    <section id="register-job"
+      class="register-job">
+      <div class="card-list-job">
+        <div class="card-register-job__header">
+          <h2>Cadastro de vaga</h2>
+        </div>
+        <div class="card-register-job__body">
+          <form name="job=register-form">
+            <div>
+              <p>Titulo</p>
+              <input required
+                id="input-title"
+                type="text">
+            </div>
+            <div>
+              <p>descrição</p>
+              <input required
+                id="input-description"
+                type="text">
+            </div>
+            <div>
+              <p>Remuneração</p>
+              <input required
+                id="input-salary"
+                type="text">
+            </div>
+
+          </form>
+        </div>
+
+        <div class="card-register-job__button">
+          <button id="back-to-job-home">voltar</button>
+          <button id="save-job">Cadastrar</button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section id="home-worker"
+      class="home-worker">
+
+      <div class="card-list-job">
+        <div class="card-list-job__header">
+          <h2>Vagas</h2>
+        </div>
+        <div class="card-list-job__body">
+          <ul id="job-list-content"></ul>
+        </div>
+
+        <div id="card-worker"
+          class="card-list-job__button">
+          <button>Sair</button>
+        </div>
+
+        <div id="card-recruiter"
+          class="card-list-job__button">
+          <button>Sair</button>
+          <button id="register-job-button">Cadastrar vaga</button>
+        </div>
+
+      </div>
+
+    </section>
+
+    </section>
+    <section id="job-description-recruiter"
+      class="job-description-recruiter">
+
+    </section>
+    <section id="job-description-user"
+      class="job-description-user">
+      <div class="card-list-job">
+        <div class="card-list-job__header">
+          Detalhe da vaga
+        </div>
+        <div class="card-job-description">
+          <div class="description">
+            <p id="job-detail-description"></p>
+            <p>Remuneração:</p>
+            <p id="job-detail-salary"></p>
+          </div>
+        </div>
+
+        <h3>Candidatos na Vaga</h3>
+
+        <div class="worker-job-list">
+          <div class="worker-job-list__card">
+            <div class="name-of-worker__header">
+              <div>nome</div>
+              <div>data de nascimento</div>
+            </div>
+
+
+            <div class="name-of-worker__body">
+              <ul id="job-applicants">
+                <li>
+                  <p>Marcos</p>
+                  <p>20/06/2012</p>
+                </li>
+                <li>
+                  <p>Marcos</p>
+                  <p>20/06/2012</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-list-job__button">
+          <button id="job-description-back">Voltar</button>
+          <button>Candidatar se</button>
+          <button>Cancelar candidatura</button>
+        </div>
+
+      </div>
+    </section>
+
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="index.js"></script>
 </body>
+
 </html>

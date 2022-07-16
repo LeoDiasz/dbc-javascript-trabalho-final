@@ -1,3 +1,38 @@
 {
-  
+  "jobs": [
+    {
+      "id": 1,
+      "titulo": "Vaga muito boa",
+      "descricao": "Descrição teste",
+      "remuneracao": "2500",
+      "candidatos": [
+        {
+          "id": 1,
+          "tipo": "trabalhador",
+          "nome": "Marcos",
+          "dataNascimento": "26/05/1993"
+        },
+        {
+          "id": 2,
+          "tipo": "trabalhador",
+          "nome": "Leo",
+          "dataNascimento": "02/09/1999"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "titulo": "Vaga muito ruim",
+      "descricao": "R$ 1400 para bater marreta",
+      "remuneracao": "1400",
+      "candidatos": []
+    },
+    {
+      "titulo": "Teste",
+      "descricao": "vaga",
+      "remuneracao": "1330",
+      "candidatos": [],
+      "id": 3
+    }
+  ]
 }
