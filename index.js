@@ -1,3 +1,5 @@
+//#region CLASSES
+
 class Usuario {
   id;
   tipo;
@@ -38,6 +40,8 @@ class Candidatura {
   }
 }
 
+//#endregion
+
 // Variável global para armazenar o usuário logado
 let user = {
   tipo: 'recrutador',
@@ -47,147 +51,322 @@ const api = axios.create({
   baseURL: 'http://localhost:3000',
 });
 
-const init = () => {
-  document.getElementById('register-job').style.display = 'none';
-  document.getElementById('job-description-user').style.display = 'none';
+// //#region FUNCIONALIDADES MARCOS
 
-  document.getElementById('register-job-button').addEventListener('click', registerJob);
-  document.getElementById('save-job').addEventListener('click', saveJob);
-  document.getElementById('back-to-job-home').addEventListener('click', backToJobHome);
-  document.getElementById('job-description-back').addEventListener('click', backToJobHome);
-};
+// const init = () => {
+//   document.getElementById('register-job').style.display = 'none';
+//   document.getElementById('job-description-user').style.display = 'none';
 
-const listJobs = () => {
-  document.getElementById('job-list-content').textContent = '';
-  showJobsBarByUserType();
+//   document.getElementById('register-job-button').addEventListener('click', registerJob);
+//   document.getElementById('save-job').addEventListener('click', saveJob);
+//   document.getElementById('back-to-job-home').addEventListener('click', backToJobHome);
+//   document.getElementById('job-description-back').addEventListener('click', backToJobHome);
+// };
 
-  try {
-    api
-      .get('/jobs')
-      .then((result) => result.data.forEach((item) => createLineJob(item)));
-  } catch (e) {
-    alert('Erro ao buscar vagas');
-  }
-};
+// const listJobs = async () => {
+//   document.getElementById('job-list-content').textContent = '';
+//   showJobsBarByUserType();
 
-const createLineJob = (vaga) => {
-  const li = document.createElement('li');
-  const divTitle = document.createElement('div');
-  const h3Title = document.createElement('h3');
-  const pTitle = document.createElement('p');
-  const divSalary = document.createElement('div');
-  const h3Salary = document.createElement('h3');
-  const pSalary = document.createElement('p');
+//   try {
+    
+//     const {data:listJobs} = await api.get("/jobs")
 
-  divTitle.classList.add('title');
-  divSalary.classList.add('salary');
+//     listJobs.forEach(item => createLineJob(item) )
+   
+//   } catch (Error) {
+//     alert('Erro ao buscar vagas');
+//   }
+// };
 
-  li.addEventListener('click', () => goToJobDescriptionPage(vaga.id));
+// const createLineJob = (vaga) => {
+//   const li = document.createElement('li');
+//   const divTitle = document.createElement('div');
+//   const h3Title = document.createElement('h3');
+//   const pTitle = document.createElement('p');
+//   const divSalary = document.createElement('div');
+//   const h3Salary = document.createElement('h3');
+//   const pSalary = document.createElement('p');
 
-  h3Title.textContent = 'Título:';
-  pTitle.textContent = vaga.titulo;
-  h3Salary.textContent = 'Remuneração:';
-  pSalary.textContent = vaga.remuneracao;
+//   divTitle.classList.add('title');
+//   divSalary.classList.add('salary');
 
-  divTitle.appendChild(h3Title);
-  divTitle.appendChild(pTitle);
+//   li.addEventListener('click', () => goToJobDescriptionPage(vaga.id));
 
-  divSalary.appendChild(h3Salary);
-  divSalary.appendChild(pSalary);
+//   h3Title.textContent = 'Título:';
+//   pTitle.textContent = vaga.titulo;
+//   h3Salary.textContent = 'Remuneração:';
+//   pSalary.textContent = vaga.remuneracao;
 
-  li.appendChild(divTitle);
-  li.appendChild(divSalary);
+//   divTitle.appendChild(h3Title);
+//   divTitle.appendChild(pTitle);
 
-  document.getElementById('job-list-content').appendChild(li);
-};
+//   divSalary.appendChild(h3Salary);
+//   divSalary.appendChild(pSalary);
 
-const showJobsBarByUserType = () => {
-  document.getElementById('card-recruiter').style.display =
-    user.tipo == 'recrutador' ? 'flex' : 'none';
-  document.getElementById('card-worker').style.display =
-    user.tipo == 'trabalhador' ? 'flex' : 'none';
-};
+//   li.appendChild(divTitle);
+//   li.appendChild(divSalary);
 
-const registerJob = () => {
-  document.getElementById('register-job').style.display = 'block';
-  document.getElementById('home-worker').style.display = 'none';
-};
+//   document.getElementById('job-list-content').appendChild(li);
+// };
 
-const saveJob = async () => {
-  const errorInputStyle = '1px solid red';
-  let title = document.getElementById('input-title');
-  let description = document.getElementById('input-description');
-  let salaryElement = document.getElementById('input-salary');
+// const showJobsBarByUserType = () => {
+//   document.getElementById('card-recruiter').style.display = user.tipo == 'recrutador' ? 'flex' : 'none';
+//   document.getElementById('card-worker').style.display = user.tipo == 'trabalhador' ? 'flex' : 'none';
+// };
 
-  salary = parseFloat(salaryElement.value);
+// const registerJob = () => {
+//   document.getElementById('register-job').style.display = 'block';
+//   document.getElementById('home-worker').style.display = 'none';
+// };
 
-  if (isNaN(salary)) {
-    alert('Remuneração em formato incorreto');
-    salaryElement.style.border = errorInputStyle;
-    return;
-  }
+// const saveJob = async () => {
+//   const errorInputStyle = '1px solid red';
+//   let title = document.getElementById('input-title');
+//   let description = document.getElementById('input-description');
+//   let salaryElement = document.getElementById('input-salary');
 
-  if (title.value == '') {
-    alert('O título é obrigatório');
-    title.style.border = errorInputStyle;
-    return;
-  }
+//   salary = parseFloat(salaryElement.value);
 
-  if (description.value == '') {
-    alert('A descrição é obrigatória');
-    description.style.border = errorInputStyle;
-    return;
-  }
+//   if (isNaN(salary)) {
+//     alert('Remuneração em formato incorreto');
+//     salaryElement.style.border = errorInputStyle;
+//     return;
+//   }
 
-  const job = new Vaga(title.value, description.value, salary);
+//   if (title.value == '') {
+//     alert('O título é obrigatório');
+//     title.style.border = errorInputStyle;
+//     return;
+//   }
 
-  try {
-    await api.post('/jobs', job);
-  } catch (e) {
-    alert('Ocorreu um erro ao cadastrar vaga');
-  }
+//   if (description.value == '') {
+//     alert('A descrição é obrigatória');
+//     description.style.border = errorInputStyle;
+//     return;
+//   }
 
-  document.getElementById('register-job').style.display = 'none';
-  document.getElementById('home-worker').style.display = 'block';
-  listJobs();
-};
+//   const job = new Vaga(title.value, description.value, salary);
 
-const backToJobHome = () => {
-  document.getElementById('register-job').style.display = 'none';
-  document.getElementById('job-description-user').style.display = 'none';
-  document.getElementById('home-worker').style.display = 'block';
-  listJobs();
-};
+//   try {
+//     await api.post('/jobs', job);
+//   } catch (e) {
+//     alert('Ocorreu um erro ao cadastrar vaga');
+//   }
 
-const goToJobDescriptionPage = (jobId) => {
-  api.get(`/jobs/${jobId}`).then(result => {
-    document.getElementById('home-worker').style.display = 'none';
-    document.getElementById('job-description-user').style.display = 'block';
+//   document.getElementById('register-job').style.display = 'none';
+//   document.getElementById('home-worker').style.display = 'block';
+//   listJobs();
+// };
 
-    document.getElementById('job-detail-description').textContent = `Descrição: ${result.data.descricao}`;
-    document.getElementById('job-detail-salary').textContent = `R$ ${result.data.remuneracao}`;
+// const backToJobHome = () => {
+//   document.getElementById('register-job').style.display = 'none';
+//   document.getElementById('job-description-user').style.display = 'none';
+//   document.getElementById('home-worker').style.display = 'block';
+//   listJobs();
+// };
 
-    let UlJobApplicants = document.getElementById('job-applicants');
-    UlJobApplicants.textContent = '';
+// const goToJobDescriptionPage = (jobId) => {
+  
+//   api.get(`/jobs/${jobId}`).then(result => {
+//     document.getElementById('home-worker').style.display = 'none';
+//     document.getElementById('job-description-user').style.display = 'block';
 
-    result.data.candidatos.forEach(candidato => {
+//     document.getElementById('job-detail-description').textContent = `Descrição: ${result.data.descricao}`;
+//     document.getElementById('job-detail-salary').textContent = `R$ ${result.data.remuneracao}`;
 
-      let li = document.createElement('li');
-      let pName = document.createElement('p');
-      let pBirthdate = document.createElement('p');
+//     let UlJobApplicants = document.getElementById('job-applicants');
+//     UlJobApplicants.textContent = '';
 
-      pName.textContent = candidato.nome;
-      pBirthdate.textContent = candidato.dataNascimento;
+//     result.data.candidatos.forEach(candidato => {
 
-      li.appendChild(pName);
-      li.appendChild(pBirthdate);
+//       let li = document.createElement('li');
+//       let pName = document.createElement('p');
+//       let pBirthdate = document.createElement('p');
 
-      UlJobApplicants.appendChild(li);
+//       pName.textContent = candidato.nome;
+//       pBirthdate.textContent = candidato.dataNascimento;
 
-    })
+//       li.appendChild(pName);
+//       li.appendChild(pBirthdate);
+
+//       UlJobApplicants.appendChild(li);
+
+//     })
+//   });
+
+// }
+
+// //#endregion
+
+// init();
+// listJobs();
+
+const emailIsValid = (email) => { 
+
+  const emailSplitForArroba = email.split('@');
+  const hasArroba = emailSplitForArroba.length === 2;
+  const addressIsValid = email.indexOf('@') >= 3;
+
+  const domainSeparate = hasArroba ? emailSplitForArroba[1].split('.') : [];
+
+  let domainIsValid = domainSeparate[0] ? domainSeparate[0].length >= 3 : false;
+
+  domainIsValid = domainIsValid && domainSeparate.every(cd => cd.length >= 2);
+  domainIsValid = domainIsValid && (domainSeparate.length === 2 || domainSeparate.length === 3);
+
+  return hasArroba && addressIsValid && domainIsValid;
+}
+
+const passwordIsValid = (password) => {
+
+  const passwordCharacters = password.split('');
+
+  const hasNumber = passwordCharacters.some(caracter => !isNaN(parseInt(caracter)));
+
+  const letters = passwordCharacters.filter( caracter => caracter.toLowerCase() !== caracter.toUpperCase());
+
+  const hasLetterUpperCase = letters.some(caracter => caracter !== caracter.toUpperCase());
+  
+  const hasLetterLowerCase = letters.some(caracter => caracter !== caracter.toLowerCase());
+
+  const hasCharacterSpecial = passwordCharacters.some(caracter => {
+    return isNaN(parseInt(caracter)) && caracter.toLowerCase() === caracter.toUpperCase();
   });
+
+  const hasEightCharacteres = password.length >= 8;
+
+  return hasNumber
+    && hasLetterUpperCase
+    && hasLetterLowerCase
+    && hasCharacterSpecial
+    && hasEightCharacteres;
+}
+
+const signInSystem = async (event) => {
+  event.preventDefault()
+
+  const valueEmail = inputLoginEmail.value
+  const valuePassword = inputLoginPassword.value
+
+  if (!valueEmail || !valuePassword) {
+    alert("Digite a senha e o email")
+    return 
+  }
+
+  if(!emailIsValid(valueEmail)) {
+    alert("Email não é valido.")
+    return 
+  }
+
+  if(!passwordIsValid(valuePassword)) {
+    alert("Senha não é valida.")
+    return
+  }
+
+  try {
+
+    const {data: result} = await api.get(`/usuario?email=${valueEmail}&senha=${valuePassword}`)
+
+    if(!result.length) {
+      alert("Usuário não existe cadastrado")
+      return
+    }
+
+    user = {
+      id: result[0].id,
+      tipo: result[0].tipo,
+      email: result[0].email
+    }
+    
+    goScreenHome()
+
+  }catch(Error) {
+    console.log("Erro ao realizar login")
+  }
+
+  clearInputs(inputLoginEmail.id, inputLoginPassword.id)
 
 }
 
-init();
-listJobs();
+const goScreenRegisterUser = () => {
+  const screenRegister = document.getElementById("register-user")
+  const screenLogin = document.getElementById("login")
+
+  screenRegister.classList.toggle("remove-element")
+  screenLogin.classList.add("remove-element")
+  
+}
+
+const goScreenHome = () => {
+  const screenHome = document.getElementById("home-worker")
+  const screenLogin = document.getElementById("login")
+
+  screenHome.classList.toggle("remove-element")
+  screenLogin.classList.add("remove-element")
+}
+
+const recoverPassword = async () => {
+  
+  try {
+    const searchEmail = prompt("Digite o e-mail que esta buscando a senha:")
+    
+    if(!searchEmail) {
+      alert("Digite algo no e-mail")
+      recoverPassword()
+      return
+    }
+
+    const {data: resultSearch} = await api.get(`/usuario?email=${searchEmail}`)
+
+    if(!resultSearch.length) {
+      alert("E-mail não existe registrado")
+      return    
+    }
+
+    alert(`Senha do colaborador: ${resultSearch[0].senha}`)
+    return
+
+  }catch(Error) {
+    alert("Erro no e-mail")
+  }
+  
+}
+
+const backForScreenLogin = (event ) => {
+  event.preventDefault()
+  
+
+}
+
+clearInputs = (...inputs) => {
+
+  if(!inputs.length) {
+    return
+  }
+
+  inputs.forEach(input => {
+    
+    const elementInput = document.getElementById(input)
+    elementInput.value = ""
+  })
+}
+
+//screen login
+
+const buttonLogin = document.getElementById("button-login")
+const inputLoginEmail = document.getElementById("input-login-email")
+const inputLoginPassword = document.getElementById("input-login-password")
+
+const notHasRegister = document.getElementById("not-has-register")
+const forgotPassword = document.getElementById("forgot-password")
+
+buttonLogin.addEventListener("click", signInSystem)
+notHasRegister.addEventListener("click", goScreenRegisterUser )
+forgotPassword.addEventListener("click", recoverPassword)
+
+//screen register user
+
+const buttonBackLogin = document.getElementById("back-screen-login")
+const buttonRegisterNewUser = document.getElementById("register-new-user")
+
+buttonBackLogin.addEventListener("click", backForScreenLogin )

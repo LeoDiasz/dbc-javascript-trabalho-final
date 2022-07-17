@@ -34,5 +34,16 @@
       "candidatos": [],
       "id": 3
     }
+  ],
+  "usuario": [
+    {
+      "id": 1,
+      "nome": "leonardo",
+      "tipo": "trabalhador",
+      "dataNascimento": "05/05/2001",
+      "email": "leonardo@leonardo.com",
+      "senha": "Leonardo123@"
+    }
+    
   ]
 }
