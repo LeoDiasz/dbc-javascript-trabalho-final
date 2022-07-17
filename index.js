@@ -35,17 +35,16 @@ class Candidatura {
   idCandidato;
   reprovado;
 
-  constructor(reprovado) {
+  constructor(idVaga, idCandidato, reprovado) {
     this.reprovado = reprovado;
+    this.idCandidato = idCandidato;
+    this.idVaga = idVaga;
   }
 }
-
 //#endregion
 
 // Variável global para armazenar o usuário logado
-let user = {
-  tipo: 'recrutador',
-};
+let user;
 
 const api = axios.create({
   baseURL: 'http://localhost:3000',
@@ -61,6 +60,9 @@ const init = () => {
   document.getElementById('save-job').addEventListener('click', saveJob);
   document.getElementById('back-to-job-home').addEventListener('click', backToJobHome);
   document.getElementById('job-description-back').addEventListener('click', backToJobHome);
+  document.getElementById('register-job-user').addEventListener('click', registerUserJob);
+  document.getElementById('register-job-cancel').addEventListener('click', cancelJobUser);
+  document.getElementById('logout').addEventListener('click', logout);
 };
 
 const listJobs = async () => {
@@ -174,32 +176,47 @@ const goToJobDescriptionPage = (jobId) => {
     document.getElementById('job-detail-description').textContent = `Descrição: ${result.data.descricao}`;
     document.getElementById('job-detail-salary').textContent = `R$ ${result.data.remuneracao}`;
 
+    document.getElementById('job-id').value = jobId;
+
     let UlJobApplicants = document.getElementById('job-applicants');
     UlJobApplicants.textContent = '';
 
-    result.data.candidatos.forEach(candidato => {
+    if(!result.data.candidatos.length){
+      return;
+    }
+
+    result.data.candidatos.forEach(item => {
+    const cancelButton = document.getElementById('register-job-cancel');
+     const candidate = users.find(user => user.id === item.idCandidato);
+
+     if(candidate){
+      document.getElementById('register-job-user').style.display = 'none';
+      cancelButton.style.display = 'block';
+     } 
+
+     if(item.reprovado){
+      cancelButton.disabled = true;
+      cancelButton.style.backgroundColor = 'grey';
+     }
 
       let li = document.createElement('li');
       let pName = document.createElement('p');
       let pBirthdate = document.createElement('p');
 
-      pName.textContent = candidato.nome;
-      pBirthdate.textContent = candidato.dataNascimento;
+      pName.textContent = candidate.nome;
+      pBirthdate.textContent = candidate.dataNascimento;
 
       li.appendChild(pName);
       li.appendChild(pBirthdate);
 
       UlJobApplicants.appendChild(li);
-
-    })
+    });
   });
 
 }
 
 //#endregion
 
-init();
-listJobs();
 
 //#region VALIDAÇÃO INPUTS REGISTRAR USUÁRIO
 const emailIsValid = (email) => { 
@@ -319,10 +336,15 @@ const signInSystem = async (event) => {
 
   try {
 
-    const {data: result} = await api.get(`/usuario?email=${valueEmail}&senha=${valuePassword}`)
+    const {data: result} = await api.get(`/usuario?email=${valueEmail}`)
 
     if(!result.length) {
       alert("Usuário não existe cadastrado")
+      return
+    }
+
+    if(result[0].senha !== valuePassword) {
+      alert("Senha invalida do usuário")
       return
     }
 
@@ -347,7 +369,7 @@ const goScreenRegisterUser = () => {
   const screenLogin = document.getElementById("login")
 
   screenRegister.classList.toggle("remove-element")
-  screenLogin.classList.add("remove-element")
+  screenLogin.classList.toggle("remove-element")
   
 }
 
@@ -476,6 +498,55 @@ const clearInputs = (...inputs) => {
   })
 }
 
+const registerUserJob = async () => {
+  const jobId = document.getElementById('job-id').value;
+  const cancelButton = document.getElementById('register-job-cancel');
+  const registerButton = document.getElementById('register-job-user');
+
+  try {
+    let {data: job} = await api.get(`/jobs/${jobId}`);
+
+    const candidatura = new Candidatura(job.id, user.id, false);
+
+    job.candidatos.push(candidatura);
+
+    await api.put(`/jobs/${jobId}`, job);
+
+    alert("Candidatura efetuada com sucesso.")
+
+    cancelButton.style.display = 'block';
+    registerButton.style.display = 'none';
+    goToJobDescriptionPage(jobId);
+
+  } catch(e) {
+    alert("Ocorreu um erro ao se cadidatar a vaga");
+    cancelButton.style.display = 'none';
+    registerButton.style.display = 'block';
+  }
+}
+
+const cancelJobUser = async () => {
+  const jobId = document.getElementById('job-id').value;
+
+  try {
+    let {data: job} = await api.get(`/jobs/${jobId}`);
+
+    job.candidatos = job.candidatos.find(item => item.idCandidato !== user.id) || [];
+
+    await api.put(`/jobs/${jobId}`, job);
+    alert("Candidatura cancelada com sucesso");
+    goToJobDescriptionPage(jobId);
+  } catch(e) {
+    alert("Ocorreu um erro ao cancelar a candidatura");
+  }
+}
+
+const logout = () => {
+  user = {};
+  document.getElementById('home-worker').style.display = 'none';
+  document.getElementById('login').style.display = 'block';
+};
+
 //screen login
 
 const buttonLogin = document.getElementById("button-login")
@@ -498,4 +569,9 @@ const inputDateBirth = document.getElementById("register-user-date")
 buttonBackLogin.addEventListener("click", backForScreenLogin)
 buttonRegisterNewUser.addEventListener("click", registerNewUser)
 inputDateBirth.addEventListener("keyup", addMaskForDate)
+
+//#endregion
+
+init();
+listJobs();
 

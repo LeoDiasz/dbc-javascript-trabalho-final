@@ -7,16 +7,9 @@
       "remuneracao": "2500",
       "candidatos": [
         {
-          "id": 1,
-          "tipo": "trabalhador",
-          "nome": "Marcos",
-          "dataNascimento": "26/05/1993"
-        },
-        {
-          "id": 2,
-          "tipo": "trabalhador",
-          "nome": "Leo",
-          "dataNascimento": "02/09/1999"
+          "idVaga": 1,
+          "idCandidato": 2,
+          "reprovado": false
         }
       ]
     },
@@ -25,7 +18,13 @@
       "titulo": "Vaga muito ruim",
       "descricao": "R$ 1400 para bater marreta",
       "remuneracao": "1400",
-      "candidatos": []
+      "candidatos": [
+        {
+          "idVaga": 2,
+          "idCandidato": 2,
+          "reprovado": false
+        }
+      ]
     },
     {
       "titulo": "Teste",
@@ -50,6 +49,14 @@
       "dataNascimento": "05/05/2001",
       "email": "leonardo@leonardo.com",
       "senha": "Leonardo123@"
+    },
+    {
+      "id": 2,
+      "nome": "marcos",
+      "tipo": "trabalhador",
+      "dataNascimento": "02/03/1996",
+      "email": "marcos@marcos.com",
+      "senha": "Marcos123@"
     }
   ]
 }
