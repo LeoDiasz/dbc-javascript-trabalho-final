@@ -165,7 +165,7 @@ button:hover {
   gap: 10px;
 }
 
-.register-user form input {
+.register-user form input, .register-user form select {
   height: 40px;
   padding: 0 10px;
   border-radius: 4px;
@@ -176,6 +176,7 @@ button:hover {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+  flex-direction: row-reverse;
 }
 
 

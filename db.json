@@ -33,6 +33,13 @@
       "remuneracao": "1330",
       "candidatos": [],
       "id": 3
+    },
+    {
+      "titulo": "Andromeda",
+      "descricao": "ewew",
+      "remuneracao": 1200,
+      "candidatos": [],
+      "id": 4
     }
   ],
   "usuario": [
@@ -44,6 +51,5 @@
       "email": "leonardo@leonardo.com",
       "senha": "Leonardo123@"
     }
-    
   ]
 }
