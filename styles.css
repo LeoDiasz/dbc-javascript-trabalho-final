@@ -4,6 +4,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  text-decoration: none;
+  list-style: none;
 }
 
 body {
@@ -11,16 +14,18 @@ body {
 }
 
 main {
-  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  max-width: 1200px;
   margin: auto;
+  height: 100vh;
 }
 
 main > section {
   width: 100%;
-}
-
-main > section:first-child {
-  width: 80%;
 }
 
 button {
@@ -41,165 +46,268 @@ button:hover {
   filter: brightness(0.96);
 }
 
-.card-list-job {
-  height: 650px;
-  border: solid 1px #e6e6e6;
+/* SECTION LOGIN */
+
+.login {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.login > div {
+  width: 100%;
+}
+
+.card-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 350px;
+
+  border: 1px solid #004E8F;
+}
+
+.card-login > div:first-child {
+  width: 100%;
+  padding: 15px;
+  background-color: #004E8F;
+  color: #fff;
+  text-align: center;
+}
+
+.card-login > form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 20px 0;
+  width: 35%;
+}
+
+.card-login form > div {
+  display: flex;
+  flex-direction: column;
+  
+  gap: 10px;
+  width: 100%;
+  font-weight: bold;
+}
+
+.card-login form > div:first-child {
+  margin-bottom: 10px;
+}
+
+.card-login form input {
+  height: 40px;
+  padding: 0 10px;
+  border-radius: 4px;
+  border: 1px solid #000;
+}
+
+.card-login form > div:first-child{
+  margin-bottom: 30px;
+}
+
+.card-login button, .card-login input {
+  width: 100%
+}
+
+.card-login button {
+  margin-top: 20px;
+}
+
+.login > div:last-child {
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.forgot-password, .not-has-register {
+  background-color: transparent;
+  color: #1A75C1;
+}
+
+/* SECTION REGISTER USER */
+
+.register-user, .register-job, .home-worker, .job-description-recruiter, .job-description-user , .job-description{
+  border: 1px solid #004E8F;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.register-user { 
+  height: 645px;
+}
+
+.register-user > div, .register-job > div, .home-worker > div:first-child, .card-list-job__header, .job-description > div:first-child{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #004E8F;
+  color: #fff;
+  height: 56px;
+}
+
+.register-user form, .register-job form, .home-worker .home-main{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.register-user form > div:not(div:last-child), .register-job form > div:not(div:last-child) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.register-user form input, .register-user form select, .register-job form input {
+  height: 40px;
+  padding: 0 10px;
+  border-radius: 4px;
+  border: 1px solid #000;
+}
+
+.register-user form > div:last-child, .register-job form > div:last-child, .home-main > div:last-child{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  flex-direction: row-reverse;
+}
+
+/* SECTION REGISTER JOB */
+
+.register-job {
+  height: 454px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
 }
 
-.card-list-job__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #004e8f;
-  color: white;
-  align-items: center;
-  justify-content: center;
-  margin-top: 30px;
+/* SECTION HOME WORKER */
+
+.home-worker {
+  min-height: 723px;
 }
 
-.card-list-job__body li {
+.card-worker {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #e0e0e0;
+  justify-content: center;
   margin-top: 10px;
 }
 
-.card-list-job__body {
-  width: 90%;
-  margin: 0 auto;
+.job-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
 }
 
-.salary,
-.title {
+.list-card-job {
   display: flex;
   align-items: center;
-}
+  justify-content: space-between;
+  padding: 0 30px;
+  height: 62px;
 
-.title h3 {
-  padding-left: 5px;
-}
-
-.salary p {
-  padding-left: 5px;
-}
-
-.card-list-job__body li:hover {
-  background-color: #e0e0e0;
+  border: 1px solid #000;
+  border-radius: 4px;
+  transition: 0.2s;
   cursor: pointer;
 }
 
-.card-list-job__button {
-  padding-top: 20px;
-  margin: 0 auto;
-  align-items: center;
-  width: 166px;
-}
-
-.card-list-job {
-  width: 100%;
-}
-
-.card-list-job__body li:hover {
-  background-color: #e0e0e0;
-  cursor: pointer;
-}
-
-.card-list-job__button {
-  padding-top: 20px;
-  margin: 0 auto;
-  align-items: center;
-  width: 166px;
-}
-
-.card-register-job__header {
+.list-card-job > div {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #004e8f;
-  color: white;
-  align-items: center;
-  justify-content: center;
-  margin-top: 30px;
+  align-items: flex-end;
+  gap: 5px;
 }
 
-.card-register-job__body {
-  width: 90%;
-  margin: 0 auto;
+.list-card-job:hover {
+  background-color: #E0E0E0;
 }
 
-.card-register-job__body input {
-  width: 1000px;
-  margin-top: 10px;
+/* SECTION DESCRIPTION */
+
+.job-description {
+  height: 942px;
 }
 
-.card-register-job__button {
+.job-description-card {
   display: flex;
-  justify-content: space-between;
-
-  padding-top: 20px;
-  margin: 0 auto;
-  align-items: center;
-  width: 1000px;
+  flex-direction: column;
+  gap: 40px;
+  padding: 20px 50px;
 }
 
-.name-of-worker__header {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #004e8f;
-  color: white;
-  align-items: center;
-  margin-top: 30px;
-  justify-content: space-between;
-}
-
-.name-of-worker__body {
-  display: flex;
-  justify-content: space-between;
-  margin: 0 auto;
-}
-
-.card-job-description {
-  margin-top: 30px;
-  border: 1px solid #1a75c1;
-  border-radius: 8px;
-}
-
-.card-list-job > h3 {
+.job-description-card h3 {
   text-align: center;
-  margin-top: 25px;
 }
 
-.worker-job-list {
-  width: 65%;
-  margin: 0 auto;
+.job-description-data {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+
+  border-radius: 8px;
+  border: 1px solid #1A75C1;
 }
 
-.worker-job-list__card {
-  border: 1px solid #004e8f;
-  border-radius: 4px 4px 0px 0px;
-  border-top: 0;
+
+.job-description-main {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 80%;
+
+  border: 1px solid #004E8F;
 }
 
-.name-of-worker__body ul {
-  width: 100%;
-}
-
-.name-of-worker__body li {
+.job-description-main > div:first-child {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  margin-top: 10px;
-  border-bottom: 1px solid black;
+  height: 52px;
+  padding: 0 30px;
+
+  background-color: #004E8F;
+  color: #fff;
+  font-weight: bold;
 }
+
+.list-candidature > li{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 20px 10px 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #000;
+}
+
+.job-description-card > div:last-child {
+  display: flex;
+  justify-content: space-between;
+  align-self: center;
+  width: 80%;
+}
+
+
+.button-reprove {
+  background-color: red;
+  color: #fff;
+  width: 166px;
+}
+
+.register-job-cancel {
+  display: none;
+}
+
+.remove-element {
+  display: none;
+}
+
+
+
+
+

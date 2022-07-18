@@ -1,11 +1,9 @@
 /*
   LINK PARA O FIGMA DO NOSSO PROJETO: https://www.figma.com/file/SAUlRA1XiycPu4ePS0CfCj/Untitled-(Copy)?node-id=0%3A1
 
-
   +----------------------------------------------------------------------------------+
   |                                 SISTEMA DE VAGAS                                 |
   +----------------------------------------------------------------------------------+
-
 
   Especificações:
 
@@ -50,7 +48,6 @@
             e outro para "Cadastrar" (cadastra, limpa os campos, retorna para a home e dá mensagem de cadastro concluído);
 
 
-
   4) Tela de Detalhamento de Vaga:
       a) Mostrar informações da vaga;
 
@@ -76,10 +73,7 @@
   +=============+
   | OBSERVAÇÂO  |   =>  Para qualquer erro que ocorrer no sistema, mostrar um alerta para o usuário e não ter nenhum erro "Uncaught"
   +=============+
-
-
-
-
+  
   Teremos as seguintes classes:
 
   class Usuario {
