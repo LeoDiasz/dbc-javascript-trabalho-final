@@ -51,7 +51,6 @@ button:hover {
 .login {
   display: flex;
   flex-direction: column;
-
   width: 80%;
 }
 
@@ -131,7 +130,7 @@ button:hover {
 
 /* SECTION REGISTER USER */
 
-.register-user, .register-job, .home-worker, .job-description-recruiter, .job-description-user {
+.register-user, .register-job, .home-worker, .job-description-recruiter, .job-description-user , .job-description{
   border: 1px solid #004E8F;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -141,7 +140,7 @@ button:hover {
   height: 645px;
 }
 
-.register-user > div, .register-job > div, .home-worker > div:first-child, .card-list-job__header, .job-description-recruiter > div:first-child{
+.register-user > div, .register-job > div, .home-worker > div:first-child, .card-list-job__header, .job-description > div:first-child{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,7 +149,7 @@ button:hover {
   height: 56px;
 }
 
-.register-user form, .register-job form, .home-worker .home-main, .job-description-recruiter > div:last-child{
+.register-user form, .register-job form, .home-worker .home-main{
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -228,14 +227,80 @@ button:hover {
   background-color: #E0E0E0;
 }
 
-/* SECTION DESCRIPTION RECRUITER */
+/* SECTION DESCRIPTION */
 
-.job-description-recruiter {
+.job-description {
   height: 942px;
 }
 
-.job-description-recruiter-card {
+.job-description-card {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: 20px 50px;
+}
+
+.job-description-card h3 {
+  text-align: center;
+}
+
+.job-description-data {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+
+  border-radius: 8px;
+  border: 1px solid #1A75C1;
+}
+
+
+.job-description-main {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: 80%;
+
+  border: 1px solid #004E8F;
+}
+
+.job-description-main > div:first-child {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  height: 52px;
+  padding: 0 30px;
+
+  background-color: #004E8F;
+  color: #fff;
+  font-weight: bold;
+}
+
+.list-candidature > li{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 20px 10px 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #000;
+}
+
+.job-description-card > div:last-child {
+  display: flex;
+  justify-content: space-between;
+  align-self: center;
+  width: 80%;
+}
+
+
+.button-reprove {
+  background-color: red;
+  color: #fff;
+  width: 166px;
+}
+
+.register-job-cancel {
+  display: none;
 }
 
 .remove-element {

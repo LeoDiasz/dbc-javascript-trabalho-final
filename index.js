@@ -51,7 +51,6 @@ const api = axios.create({
   baseURL: 'http://localhost:3000',
 });
 
-
 // Ir para as telas
 const goForScreen = ( screenNowId, screenAfterId, event) => {
   if(event) {
@@ -65,6 +64,18 @@ const goForScreen = ( screenNowId, screenAfterId, event) => {
   screenAfter.classList.remove("remove-element")
 }
 
+const clearInputs = (...inputs) => {
+
+  if(!inputs.length) {
+    return
+  }
+
+  inputs.forEach(input => {
+    
+    const elementInput = document.getElementById(input)
+    elementInput.value = ""
+  })
+}
 
 //#region VALIDAÇÃO INPUTS REGISTRAR USUÁRIO
 
@@ -145,8 +156,8 @@ const nameIsValid = (name) => {
 const addMaskForDate = () => {
   
   const dateInput = document.getElementById('register-user-date');
-  let date = dateInput.value.replaceAll(' ', '').replaceAll('/', ''); // remover espaços e barras
-  // dependendo do tamanho vamos retornar uma determinada string
+  let date = dateInput.value.replaceAll(' ', '').replaceAll('/', ''); 
+
   switch(date.length) {
     case 3: case 4:
       dateInput.value = `${date.substring(0,2)}/${date.substring(2)}`;
@@ -184,7 +195,6 @@ const signInSystem = async (event) => {
     return
   }
   
-
   try {
 
     const {data: result} = await api.get(`/usuario?email=${valueEmail}`)
@@ -303,7 +313,6 @@ const registerNewUser = async (event) => {
       alert("Usuário cadastrado com sucesso.")
     }
     
-
     const listIdInputs = ["register-user-type", "register-user-name", 
     "register-user-email", "register-user-date", "register-user-password"]
 
@@ -312,10 +321,19 @@ const registerNewUser = async (event) => {
     return
     
   } catch(Error) {
-    console.log(Error)
+    alert("Erro ao registrar usuário")
     return
   }
   
+
+}
+
+const backForScreenLogin = (event) => {
+  const listIdInputs = ["register-user-type", "register-user-name", "register-user-email", "register-user-date", "register-user-password"]
+
+  clearInputs(...listIdInputs)
+
+  goForScreen("register-user", "login", event)
 
 }
 
@@ -323,44 +341,60 @@ const registerNewUser = async (event) => {
 
 //#region TELA DE CADASTRAR VAGA
 
-const saveJob = async () => {
-  const errorInputStyle = '1px solid red';
-  let title = document.getElementById('input-title');
-  let description = document.getElementById('input-description');
-  let salaryElement = document.getElementById('input-salary');
+const saveJob = async (event) => {
+  event.preventDefault()
 
-  salary = parseFloat(salaryElement.value);
-
-  if (isNaN(salary)) {
-    alert('Remuneração em formato incorreto');
-    salaryElement.style.border = errorInputStyle;
-    return;
+  const {value:inputTitle} = document.getElementById('input-title');
+  const {value:inputDescription} = document.getElementById('input-description');
+  const {value:inputSalary} = document.getElementById('input-salary');
+  
+  let messageError = ""
+  
+  if(!inputTitle || !inputDescription || !inputSalary) {
+    alert("Digite todos os parametros")
+    return
   }
 
-  if (title.value == '') {
-    alert('O título é obrigatório');
-    title.style.border = errorInputStyle;
-    return;
+  if (isNaN(inputSalary) || inputSalary < 0) {
+    messageError += 'Remuneração somente numeros acima de 0\n';
   }
 
-  if (description.value == '') {
-    alert('A descrição é obrigatória');
-    description.style.border = errorInputStyle;
-    return;
+  if (!inputTitle.length) {
+    messageError += 'O título é obrigatório. Digite algum valor.\n'
   }
 
-  const job = new Vaga(title.value, description.value, salary);
+  if (!inputDescription.length) {
+    messageError +='A descrição é obrigatória. Digite algum valor.\n';
+  }
 
+  if(messageError.length) {
+    alert(`Erro ao cadastrar a vaga, verifique:\n${messageError}`)
+    return
+  }
+
+  const formatSalary = `R$ ${inputSalary}`
+  const newJob = new Vaga(inputTitle, inputDescription, formatSalary);
+  
   try {
-    await api.post('/jobs', job);
+    await api.post('/jobs', newJob);
+
+    alert("Vaga cadastrada com sucesso")
+    clearInputs("input-title", "input-salary", "input-description")
+    goForScreen("register-job", "home-worker")
+    showListJobs();
+    return
+    
   } catch (e) {
     alert('Ocorreu um erro ao cadastrar vaga');
-  }
-
-  document.getElementById('register-job').style.display = 'none';
-  document.getElementById('home-worker').style.display = 'block';
-  listJobs();
+    clearInputs("input-title", "input-salary", "input-description")
+    return
+  } 
 };
+
+const backForHome = (event) => {
+  clearInputs("input-title", "input-description", "input-salary")
+  goForScreen("register-job", "home-worker", event)
+}
 
 //#endregion
 
@@ -380,6 +414,7 @@ const showListJobs = async () => {
     }
 
     listJobs.forEach(item => createElementJob(item) )
+    return
    
   } catch (Error) {
     alert('Erro ao buscar vagas');
@@ -390,8 +425,15 @@ const showJobsBarByUserType = () => {
   const divShowForRecruiter = document.getElementById('card-recruiter')
   const divShowForWorker = document.getElementById('card-worker')
 
-  divShowForRecruiter.style.display = user.tipo !== 'recrutador' && 'none';
-  divShowForWorker.style.display = user.tipo !== 'trabalhador' && 'none';
+  if(user.tipo == "recrutador") {
+    divShowForRecruiter.style.display = "flex"
+    divShowForWorker.style.display = "none"
+
+  } else {
+    divShowForWorker.style.display = "flex"
+    divShowForRecruiter.style.display = "none"
+  }
+
 };
 
 const createElementJob = (job) => {
@@ -416,7 +458,7 @@ const createElementJob = (job) => {
   divSalary.append(h3Salary, pSalary)
 
   li.append(divTitle, divSalary)
-  li.addEventListener('click', () => goToJobDescriptionPage(job.id));
+  li.addEventListener('click', event => goToJobDescriptionPage(job.id, event));
   li.classList.add("list-card-job")
 
   listContent.append(li)
@@ -435,76 +477,136 @@ const logout = () => {
 
 //#endregion
 
-const goToJobDescriptionPage = (jobId) => {
+//#region TELA DESCRIÇÃO VAGA
+
+const createElementCandidatureInJob = async (worker, jobId) => {
+  const listCandidature = document.getElementById('list-candidature');
+  const cancelCandidatureButton = document.getElementById('register-job-cancel');
+
+  const isCandidate = worker.idCandidato == user.id
+
+  listCandidature.textContent = ""
+
+  try {
+    const {data:candidateData} = await api.get(`/usuario/${worker.idCandidato}`)
+    
+    let li = document.createElement('li');
+    let pName = document.createElement('p');
+    let pBirthdate = document.createElement('p');
+    let buttonReprove = document.createElement("button")
+
+    const dateCandidate = candidateData.dataNascimento
+    const date = new Date(dateCandidate)
+    const dateFormat = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+
+    pName.textContent = candidateData.nome;
+    pBirthdate.textContent = dateFormat
+    buttonReprove.textContent = "Reprovar"
+    buttonReprove.classList.add("button-reprove")
+    buttonReprove.addEventListener("click", event => reproveWorkerInJob(jobId, worker))
   
-  api.get(`/jobs/${jobId}`).then(result => {
-    document.getElementById('home-worker').style.display = 'none';
-    document.getElementById('job-description-user').style.display = 'block';
-
-    document.getElementById('job-detail-description').textContent = `Descrição: ${result.data.descricao}`;
-    document.getElementById('job-detail-salary').textContent = `R$ ${result.data.remuneracao}`;
-
-    document.getElementById('job-id').value = jobId;
-
-    let UlJobApplicants = document.getElementById('job-applicants');
-    UlJobApplicants.textContent = '';
-
-    if(!result.data.candidatos.length){
-      return;
+    if(worker.reprovado && isCandidate && user.tipo == "trabalhador"){
+      pName.style.color = "red"
     }
 
-    result.data.candidatos.forEach(item => {
-    const cancelButton = document.getElementById('register-job-cancel');
-     const candidate = users.find(user => user.id === item.idCandidato);
+    if(user.tipo == "recrutador" && worker.reprovado) {
+      pName.style.color = "red"
+      buttonReprove.disabled = true;
+      buttonReprove.style.backgroundColor = 'grey';
+    }
 
-     if(candidate){
-      document.getElementById('register-job-user').style.display = 'none';
-      cancelButton.style.display = 'block';
-     } 
+    if(isCandidate && worker.reprovado) {
+      cancelCandidatureButton.disabled = true;
+      cancelCandidatureButton.style.backgroundColor = 'grey';
+    }
 
-     if(item.reprovado){
-      cancelButton.disabled = true;
-      cancelButton.style.backgroundColor = 'grey';
-     }
+    if(user.tipo == "recrutador") {
+      li.append(pName, pBirthdate, buttonReprove)
+    } else {
+      li.append(pName, pBirthdate)
+    }
+    
+    listCandidature.append(li)
 
-      let li = document.createElement('li');
-      let pName = document.createElement('p');
-      let pBirthdate = document.createElement('p');
-
-      pName.textContent = candidate.nome;
-      pBirthdate.textContent = candidate.dataNascimento;
-
-      li.appendChild(pName);
-      li.appendChild(pBirthdate);
-
-      UlJobApplicants.appendChild(li);
-    });
-  });
-
-}
-
-const clearInputs = (...inputs) => {
-
-  if(!inputs.length) {
+  } catch(Error) {
+    alert("Erro ao montar a lista")
     return
   }
-
-  inputs.forEach(input => {
-    
-    const elementInput = document.getElementById(input)
-    elementInput.value = ""
-  })
 }
 
-const registerUserJob = async () => {
-  const jobId = document.getElementById('job-id').value;
-  const cancelButton = document.getElementById('register-job-cancel');
-  const registerButton = document.getElementById('register-job-user');
+const goToJobDescriptionPage = async (jobId, event) => {
+  event.preventDefault()
+
+
+  const {data:dataJob} = await api.get(`jobs/${jobId}`)
+
+  goForScreen("home-worker", "job-description")
+
+  const title = document.getElementById("job-description-title")
+  const description = document.getElementById("job-text")
+  const salary = document.getElementById("job-description-salary")
+
+  const divButtonsWorker = document.getElementById("job-description-options-worker")
+  divButtonsWorker.textContent = ""
+  const divButtonRecruiter = document.getElementById("job-description-options-recruiter")
+  divButtonRecruiter.textContent = ""
+
+  const createButtonDelete = document.createElement("button")
+  createButtonDelete.textContent = "Excluir vaga"
+  createButtonDelete.addEventListener("click", event => deleteRoomJob(jobId, event))
+  divButtonRecruiter.append(createButtonDelete)
+
+  const createButtonApllyJob = document.createElement("button")
+  createButtonApllyJob.textContent = "Candidatar-se"
+  createButtonApllyJob.addEventListener("click", event => registerUserInJob(jobId, event))
+  createButtonApllyJob.setAttribute("id", "job-description-apply-job")
+  
+  const createButtonCancelApply = document.createElement("button")
+  createButtonCancelApply.textContent = "Cancelar candidatura"
+  createButtonCancelApply.addEventListener("click", event => cancelJobUser(jobId, event))
+  createButtonCancelApply.setAttribute("id", "register-job-cancel")
+  createButtonCancelApply.classList.add("register-job-cancel")
+
+  divButtonsWorker.append(createButtonApllyJob, createButtonCancelApply)
+
+  if(user.tipo == "recrutador") {
+    divButtonsWorker.classList.add("remove-element")
+    divButtonRecruiter.classList.remove("remove-element")
+
+  } else {
+    divButtonsWorker.classList.remove("remove-element")
+    divButtonRecruiter.classList.add("remove-element")
+  }
+
+  title.textContent = `Titulo: ${dataJob.titulo}`
+  description.textContent = `Descrição: ${dataJob.descricao}`
+  salary.textContent = `Remuneração: ${dataJob.remuneracao}`
+
+  if(!dataJob.candidatos.length){
+    return;
+  }
+
+  const isCandidate = dataJob.candidatos.some(candidato => candidato.idCandidato == user.id)
+
+  if(isCandidate) {
+    createButtonApllyJob.style.display = "none"
+    createButtonCancelApply.style.display = "block"
+
+  } else {
+    createButtonApllyJob.style.display = "block"
+    createButtonCancelApply.style.display = "none"
+  }
+  
+  dataJob.candidatos.forEach(worker => createElementCandidatureInJob(worker, jobId))
+}
+
+const registerUserInJob = async (jobId, event) => {
+  event.preventDefault()
 
   try {
     let {data: job} = await api.get(`/jobs/${jobId}`);
 
-    const candidatura = new Candidatura(job.id, user.id, false);
+    const candidatura = new Candidatura(jobId, user.id, false);
 
     job.candidatos.push(candidatura);
 
@@ -512,19 +614,18 @@ const registerUserJob = async () => {
 
     alert("Candidatura efetuada com sucesso.")
 
-    cancelButton.style.display = 'block';
-    registerButton.style.display = 'none';
-    goToJobDescriptionPage(jobId);
+    goForScreen("job-description", "home-worker")
+    showListJobs()
+    return
 
   } catch(e) {
     alert("Ocorreu um erro ao se cadidatar a vaga");
-    cancelButton.style.display = 'none';
-    registerButton.style.display = 'block';
+    
   }
 }
 
-const cancelJobUser = async () => {
-  const jobId = document.getElementById('job-id').value;
+const cancelJobUser = async (jobId, event) => {
+  event.preventDefault()
 
   try {
     let {data: job} = await api.get(`/jobs/${jobId}`);
@@ -532,12 +633,70 @@ const cancelJobUser = async () => {
     job.candidatos = job.candidatos.find(item => item.idCandidato !== user.id) || [];
 
     await api.put(`/jobs/${jobId}`, job);
+
     alert("Candidatura cancelada com sucesso");
-    goToJobDescriptionPage(jobId);
+    
   } catch(e) {
+    
     alert("Ocorreu um erro ao cancelar a candidatura");
   }
+
+  goForScreen("job-description", "home-worker")
+  showListJobs()
 }
+
+const deleteRoomJob = async (jobId, event) => {
+  event.preventDefault()
+  const isConfirm = confirm("Você tem certeza que deseja deletar a sala?")
+
+  if (!isConfirm) {
+    return
+  }
+
+  try {
+    await api.delete(`/jobs/${jobId}`)
+ 
+    alert("vaga deletada com sucesso")
+    goForScreen("job-description", "home-worker")
+    showListJobs()
+    return
+
+  } catch(Error) {
+    alert("Não foi possivel deletar a sala.")
+  }
+  
+}
+
+const reproveWorkerInJob = async (jobId, worker, event) => {
+
+  const isConfirm = confirm("Você tem certeza que deseja reprovar o candidato?")
+  
+  if (!isConfirm) {
+    return
+  }
+
+  try {
+    const {data:job} = await api.get(`/jobs/${jobId}`)
+
+    job.candidatos.forEach(candidato => {
+      if (candidato.id == worker.id) {
+        candidato.reprovado = true
+      }
+    }) 
+
+    await api.put(`/jobs/${jobId}`, job)
+
+    alert("Candidato reprovado com sucesso")
+    return
+  
+} catch(Error) {
+    alert("Erro ao reprovar candidato.")
+    return
+  }
+
+} 
+//#endregion
+
 
 //screen login
 
@@ -557,7 +716,7 @@ const buttonBackLogin = document.getElementById("back-screen-login")
 const buttonRegisterNewUser = document.getElementById("register-new-user")
 const inputDateBirth = document.getElementById("register-user-date")
 
-buttonBackLogin.addEventListener("click", event => goForScreen("register-user", "login", event))
+buttonBackLogin.addEventListener("click", backForScreenLogin)
 buttonRegisterNewUser.addEventListener("click", registerNewUser)
 inputDateBirth.addEventListener("keyup", addMaskForDate)
 
@@ -578,19 +737,14 @@ const buttonRegisterNewJob = document.getElementById('save-job')
 buttonRegisterNewJob.addEventListener('click', saveJob);
 
 const buttonBackToScreenHome = document.getElementById('back-to-job-home')
-buttonBackToScreenHome.addEventListener('click', event => goForScreen("register-job", "home-worker", event));
+buttonBackToScreenHome.addEventListener('click', backForHome);
 
-
-//screen description job for user
+//screen description 
 
 const buttonGoScreenHome = document.getElementById('job-description-back')
-buttonGoScreenHome.addEventListener('click', event => goForScreen("job-description-recruiter", "home-worker", event));
+buttonGoScreenHome.addEventListener('click', event => goForScreen("job-description", "home-worker", event));
 
-const buttonApllyInJob = document.getElementById('register-job-user')
-buttonApllyInJob.addEventListener('click', registerUserJob);
 
-const buttonCancelAplly = document.getElementById('register-job-cancel')
-buttonCancelAplly.addEventListener('click', cancelJobUser);
 
 
 

@@ -48,7 +48,6 @@
             e outro para "Cadastrar" (cadastra, limpa os campos, retorna para a home e dá mensagem de cadastro concluído);
 
 
-
   4) Tela de Detalhamento de Vaga:
       a) Mostrar informações da vaga;
 

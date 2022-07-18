@@ -75,15 +75,15 @@
       <form>
         <div>
           <label for="input-title">Titulo</label>
-          <input required id="input-title" type="text">
+          <input id="input-title" type="text">
         </div>
         <div>
           <label for="input-description">Descrição</label> 
-          <input required id="input-description" type="text">
+          <input id="input-description" type="text">
         </div>
         <div>
           <label for="input-salary">Remuneração*</label>
-          <input required id="input-salary" type="text">
+          <input id="input-salary" type="number">
         </div>
         <div>
           <button id="save-job">Cadastrar</button>
@@ -111,78 +111,35 @@
       </div>
     </section>
 
-    <section id="job-description-recruiter" class="job-description-recruiter remove-element">
+    <section id="job-description" class="job-description remove-element">
       <div>
         <h1>Detalhe da vaga</h1>
       </div>
-      <div class="job-description-recruiter-card">
-        <div class="description">
-          <p>Titulo:</p>
-          <p>Descrição</p>
-          <p>Remuneração:</p>
+      <div class="job-description-card">
+        <div class="job-description-data">
+          <p id="job-description-title">Titulo:</p>
+          <p id="job-text">Descrição</p>
+          <p id="job-description-salary">Remuneração:</p>
         </div>
-     
         <h3>Candidatos da Vaga</h3>
-  
-        <div>
+        <div class="job-description-main">
           <div>
             <p>Nome</p>
             <p>Data nascimento</p>
           </div>
-          <ul class="list-candidature">
-            <li>
-              <p></p>
-              <p></p>
-              <button id="reprove-candidate">Reprovar</button>
-            </li>
+          <ul id="list-candidature" class="list-candidature">
           </ul>
-          <div>
-            <button id="job-description-back-recruiter">Voltar</button>
-            <button id="job-description-delete">Excluir vaga</button>
-          </div>
-        
         </div>
-  
-        
-      </div>
-    </section>
-
-    <section id="job-description-user" class="job-description-user remove-element">
-        <div class="card-list-job__header">
-          <h1>Detalhe da vaga</h1>
-        </div>
-        <div class="card-job-description">
-          <div class="description">
-            <p id="job-detail-description"></p>
-            <p>Remuneração:</p>
-            <p id="job-detail-salary"></p>
-          </div>
-        </div>
-
-        <h3>Candidatos na Vaga</h3>
-
-        <div class="worker-job-list">
-          <div class="worker-job-list__card">
-            <div class="name-of-worker__header">
-              <p>nome</p>
-              <p>data de nascimento</p>
-            </div>
-
-
-            <div class="name-of-worker__body">
-              <ul id="job-applicants">
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-list-job__button">
+        <div>
           <button id="job-description-back">Voltar</button>
-          <button id="register-job-user">Candidatar se</button>
-          <button id="register-job-cancel">Cancelar candidatura</button>
+          <div id="job-description-options-recruiter">
+          </div>
+
+          <div id="job-description-options-worker">
+          </div>
         </div>
-    </section>
-  
+      </div>
+    </section>     
   </main>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="index.js"></script>

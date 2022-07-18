@@ -1,62 +1,14 @@
 {
   "jobs": [
     {
-      "id": 1,
-      "titulo": "Vaga muito boa",
-      "descricao": "Descrição teste",
-      "remuneracao": "2500",
-      "candidatos": [
-        {
-          "idVaga": 1,
-          "idCandidato": 2,
-          "reprovado": false
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "titulo": "Vaga muito ruim",
-      "descricao": "R$ 1400 para bater marreta",
-      "remuneracao": "1400",
-      "candidatos": [
-        {
-          "idVaga": 2,
-          "idCandidato": 2,
-          "reprovado": false
-        }
-      ]
-    },
-    {
-      "titulo": "Teste",
-      "descricao": "vaga",
-      "remuneracao": "1330",
+      "titulo": "Estagio",
+      "descricao": "Programação",
+      "remuneracao": "R$ 1500",
       "candidatos": [],
-      "id": 3
-    },
-    {
-      "titulo": "Andromeda",
-      "descricao": "ewew",
-      "remuneracao": 1200,
-      "candidatos": [],
-      "id": 4
-    },
-    {
-      "titulo": "Andromeda",
-      "descricao": "ewew",
-      "remuneracao": 1200,
-      "candidatos": [],
-      "id": 5
+      "id": 1
     }
   ],
   "usuario": [
-    {
-      "id": 1,
-      "nome": "leonardo",
-      "tipo": "trabalhador",
-      "dataNascimento": "05/05/2001",
-      "email": "leonardo@leonardo.com",
-      "senha": "Leonardo123@"
-    },
     {
       "tipo": "recrutador",
       "nome": "andromeda",
@@ -65,7 +17,15 @@
       "email": "leonardoduarte@hotmail.com",
       "senha": "Leo040446@",
       "id": 2
+    },
+    {
+      "tipo": "trabalhador",
+      "nome": "Leonardo Dias",
+      "dataNascimento": "2001-06-05T03:00:00.000Z",
+      "candidaturas": [],
+      "email": "leonardoduarte@leonardo.com",
+      "senha": "Leo123123@",
+      "id": 3
     }
-    
   ]
 }
