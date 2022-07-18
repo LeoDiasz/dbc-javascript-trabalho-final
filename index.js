@@ -41,6 +41,7 @@ class Candidatura {
     this.idVaga = idVaga;
   }
 }
+
 //#endregion
 
 // Variável global para armazenar o usuário logado
@@ -50,175 +51,23 @@ const api = axios.create({
   baseURL: 'http://localhost:3000',
 });
 
-//#region FUNCIONALIDADES MARCOS
 
-const init = () => {
-  document.getElementById('register-job').style.display = 'none';
-  document.getElementById('job-description-user').style.display = 'none';
-
-  document.getElementById('register-job-button').addEventListener('click', registerJob);
-  document.getElementById('save-job').addEventListener('click', saveJob);
-  document.getElementById('back-to-job-home').addEventListener('click', backToJobHome);
-  document.getElementById('job-description-back').addEventListener('click', backToJobHome);
-  document.getElementById('register-job-user').addEventListener('click', registerUserJob);
-  document.getElementById('register-job-cancel').addEventListener('click', cancelJobUser);
-  document.getElementById('logout').addEventListener('click', logout);
-};
-
-const listJobs = async () => {
-  document.getElementById('job-list-content').textContent = '';
-  showJobsBarByUserType();
-
-  try {
-    
-    const {data:listJobs} = await api.get("/jobs")
-
-    listJobs.forEach(item => createLineJob(item) )
-   
-  } catch (Error) {
-    alert('Erro ao buscar vagas');
-  }
-};
-
-const createLineJob = (vaga) => {
-  const li = document.createElement('li');
-  const divTitle = document.createElement('div');
-  const h3Title = document.createElement('h3');
-  const pTitle = document.createElement('p');
-  const divSalary = document.createElement('div');
-  const h3Salary = document.createElement('h3');
-  const pSalary = document.createElement('p');
-
-  divTitle.classList.add('title');
-  divSalary.classList.add('salary');
-
-  li.addEventListener('click', () => goToJobDescriptionPage(vaga.id));
-
-  h3Title.textContent = 'Título:';
-  pTitle.textContent = vaga.titulo;
-  h3Salary.textContent = 'Remuneração:';
-  pSalary.textContent = vaga.remuneracao;
-
-  divTitle.appendChild(h3Title);
-  divTitle.appendChild(pTitle);
-
-  divSalary.appendChild(h3Salary);
-  divSalary.appendChild(pSalary);
-
-  li.appendChild(divTitle);
-  li.appendChild(divSalary);
-
-  document.getElementById('job-list-content').appendChild(li);
-};
-
-const showJobsBarByUserType = () => {
-  document.getElementById('card-recruiter').style.display = user.tipo == 'recrutador' ? 'flex' : 'none';
-  document.getElementById('card-worker').style.display = user.tipo == 'trabalhador' ? 'flex' : 'none';
-};
-
-const registerJob = () => {
-  document.getElementById('register-job').style.display = 'block';
-  document.getElementById('home-worker').style.display = 'none';
-};
-
-const saveJob = async () => {
-  const errorInputStyle = '1px solid red';
-  let title = document.getElementById('input-title');
-  let description = document.getElementById('input-description');
-  let salaryElement = document.getElementById('input-salary');
-
-  salary = parseFloat(salaryElement.value);
-
-  if (isNaN(salary)) {
-    alert('Remuneração em formato incorreto');
-    salaryElement.style.border = errorInputStyle;
-    return;
+// Ir para as telas
+const goForScreen = ( screenNowId, screenAfterId, event) => {
+  if(event) {
+    event.preventDefault()
   }
 
-  if (title.value == '') {
-    alert('O título é obrigatório');
-    title.style.border = errorInputStyle;
-    return;
-  }
+  const screenNow = document.getElementById(screenNowId)
+  const screenAfter = document.getElementById(screenAfterId)
 
-  if (description.value == '') {
-    alert('A descrição é obrigatória');
-    description.style.border = errorInputStyle;
-    return;
-  }
-
-  const job = new Vaga(title.value, description.value, salary);
-
-  try {
-    await api.post('/jobs', job);
-  } catch (e) {
-    alert('Ocorreu um erro ao cadastrar vaga');
-  }
-
-  document.getElementById('register-job').style.display = 'none';
-  document.getElementById('home-worker').style.display = 'block';
-  listJobs();
-};
-
-const backToJobHome = () => {
-  document.getElementById('register-job').style.display = 'none';
-  document.getElementById('job-description-user').style.display = 'none';
-  document.getElementById('home-worker').style.display = 'block';
-  listJobs();
-};
-
-const goToJobDescriptionPage = (jobId) => {
-  
-  api.get(`/jobs/${jobId}`).then(result => {
-    document.getElementById('home-worker').style.display = 'none';
-    document.getElementById('job-description-user').style.display = 'block';
-
-    document.getElementById('job-detail-description').textContent = `Descrição: ${result.data.descricao}`;
-    document.getElementById('job-detail-salary').textContent = `R$ ${result.data.remuneracao}`;
-
-    document.getElementById('job-id').value = jobId;
-
-    let UlJobApplicants = document.getElementById('job-applicants');
-    UlJobApplicants.textContent = '';
-
-    if(!result.data.candidatos.length){
-      return;
-    }
-
-    result.data.candidatos.forEach(item => {
-    const cancelButton = document.getElementById('register-job-cancel');
-     const candidate = users.find(user => user.id === item.idCandidato);
-
-     if(candidate){
-      document.getElementById('register-job-user').style.display = 'none';
-      cancelButton.style.display = 'block';
-     } 
-
-     if(item.reprovado){
-      cancelButton.disabled = true;
-      cancelButton.style.backgroundColor = 'grey';
-     }
-
-      let li = document.createElement('li');
-      let pName = document.createElement('p');
-      let pBirthdate = document.createElement('p');
-
-      pName.textContent = candidate.nome;
-      pBirthdate.textContent = candidate.dataNascimento;
-
-      li.appendChild(pName);
-      li.appendChild(pBirthdate);
-
-      UlJobApplicants.appendChild(li);
-    });
-  });
-
+  screenNow.classList.add("remove-element")
+  screenAfter.classList.remove("remove-element")
 }
-
-//#endregion
 
 
 //#region VALIDAÇÃO INPUTS REGISTRAR USUÁRIO
+
 const emailIsValid = (email) => { 
 
   const emailSplitForArroba = email.split('@');
@@ -312,6 +161,8 @@ const addMaskForDate = () => {
 
 //#endregion
 
+//#region TELA DE LOGIN
+
 const signInSystem = async (event) => {
   event.preventDefault()
 
@@ -354,7 +205,8 @@ const signInSystem = async (event) => {
       email: result[0].email
     }
 
-    goScreenHome()
+    goForScreen("login", "home-worker")
+    showListJobs()
 
   }catch(Error) {
     console.log("Erro ao realizar login")
@@ -363,32 +215,6 @@ const signInSystem = async (event) => {
   clearInputs(inputLoginEmail.id, inputLoginPassword.id)
 
 }
-
-const goScreenRegisterUser = () => {
-  const screenRegister = document.getElementById("register-user")
-  const screenLogin = document.getElementById("login")
-
-  screenRegister.classList.toggle("remove-element")
-  screenLogin.classList.toggle("remove-element")
-  
-}
-
-const goScreenHome = () => {
-  const screenHome = document.getElementById("home-worker")
-  const screenLogin = document.getElementById("login")
-
-  screenHome.classList.toggle("remove-element")
-  screenLogin.classList.add("remove-element")
-}
-
-const backForScreenLogin = (event ) => {
-  event.preventDefault()
-  const screenRegister = document.getElementById("register-user")
-  const screenLogin = document.getElementById("login")
-
-  screenRegister.classList.toggle("remove-element")
-  screenLogin.classList.remove("remove-element")
-} 
 
 const recoverPassword = async () => {
   
@@ -415,6 +241,11 @@ const recoverPassword = async () => {
   }
   
 }
+
+
+//#endregion
+
+//#region TELA DE CADASTRAR USUÁRIO
 
 const registerNewUser = async (event) => {
   event.preventDefault()
@@ -473,8 +304,11 @@ const registerNewUser = async (event) => {
     }
     
 
-    clearInputs()
-    backForScreenLogin()
+    const listIdInputs = ["register-user-type", "register-user-name", 
+    "register-user-email", "register-user-date", "register-user-password"]
+
+    clearInputs(...listIdInputs)
+    goForScreen("register-user", "login")
     return
     
   } catch(Error) {
@@ -482,6 +316,170 @@ const registerNewUser = async (event) => {
     return
   }
   
+
+}
+
+//#endregion
+
+//#region TELA DE CADASTRAR VAGA
+
+const saveJob = async () => {
+  const errorInputStyle = '1px solid red';
+  let title = document.getElementById('input-title');
+  let description = document.getElementById('input-description');
+  let salaryElement = document.getElementById('input-salary');
+
+  salary = parseFloat(salaryElement.value);
+
+  if (isNaN(salary)) {
+    alert('Remuneração em formato incorreto');
+    salaryElement.style.border = errorInputStyle;
+    return;
+  }
+
+  if (title.value == '') {
+    alert('O título é obrigatório');
+    title.style.border = errorInputStyle;
+    return;
+  }
+
+  if (description.value == '') {
+    alert('A descrição é obrigatória');
+    description.style.border = errorInputStyle;
+    return;
+  }
+
+  const job = new Vaga(title.value, description.value, salary);
+
+  try {
+    await api.post('/jobs', job);
+  } catch (e) {
+    alert('Ocorreu um erro ao cadastrar vaga');
+  }
+
+  document.getElementById('register-job').style.display = 'none';
+  document.getElementById('home-worker').style.display = 'block';
+  listJobs();
+};
+
+//#endregion
+
+//#region TELA HOME
+
+const showListJobs = async () => {
+  const listContent = document.getElementById('job-list-content')
+  listContent.textContent = '';
+
+  showJobsBarByUserType();
+  
+  try {
+    const {data:listJobs} = await api.get("/jobs")
+
+    if(!listJobs.length) {
+      return
+    }
+
+    listJobs.forEach(item => createElementJob(item) )
+   
+  } catch (Error) {
+    alert('Erro ao buscar vagas');
+  }
+};
+
+const showJobsBarByUserType = () => {
+  const divShowForRecruiter = document.getElementById('card-recruiter')
+  const divShowForWorker = document.getElementById('card-worker')
+
+  divShowForRecruiter.style.display = user.tipo !== 'recrutador' && 'none';
+  divShowForWorker.style.display = user.tipo !== 'trabalhador' && 'none';
+};
+
+const createElementJob = (job) => {
+  const li = document.createElement('li');
+  const listContent = document.getElementById("job-list-content")
+
+  const divTitle = document.createElement('div');
+  const h3Title = document.createElement('h3');
+  const pTitle = document.createElement('p');
+
+  const divSalary = document.createElement('div');
+  const h3Salary = document.createElement('h3');
+  const pSalary = document.createElement('p');
+
+  h3Title.textContent = 'Título:';
+  pTitle.textContent = job.titulo;
+
+  h3Salary.textContent = 'Remuneração:';
+  pSalary.textContent = job.remuneracao;
+
+  divTitle.append(h3Title, pTitle)
+  divSalary.append(h3Salary, pSalary)
+
+  li.append(divTitle, divSalary)
+  li.addEventListener('click', () => goToJobDescriptionPage(job.id));
+  li.classList.add("list-card-job")
+
+  listContent.append(li)
+ 
+};
+
+const logout = () => {
+
+  if(user) {
+    user = {};
+  }
+  
+  goForScreen("home-worker", "login")
+ 
+}
+
+//#endregion
+
+const goToJobDescriptionPage = (jobId) => {
+  
+  api.get(`/jobs/${jobId}`).then(result => {
+    document.getElementById('home-worker').style.display = 'none';
+    document.getElementById('job-description-user').style.display = 'block';
+
+    document.getElementById('job-detail-description').textContent = `Descrição: ${result.data.descricao}`;
+    document.getElementById('job-detail-salary').textContent = `R$ ${result.data.remuneracao}`;
+
+    document.getElementById('job-id').value = jobId;
+
+    let UlJobApplicants = document.getElementById('job-applicants');
+    UlJobApplicants.textContent = '';
+
+    if(!result.data.candidatos.length){
+      return;
+    }
+
+    result.data.candidatos.forEach(item => {
+    const cancelButton = document.getElementById('register-job-cancel');
+     const candidate = users.find(user => user.id === item.idCandidato);
+
+     if(candidate){
+      document.getElementById('register-job-user').style.display = 'none';
+      cancelButton.style.display = 'block';
+     } 
+
+     if(item.reprovado){
+      cancelButton.disabled = true;
+      cancelButton.style.backgroundColor = 'grey';
+     }
+
+      let li = document.createElement('li');
+      let pName = document.createElement('p');
+      let pBirthdate = document.createElement('p');
+
+      pName.textContent = candidate.nome;
+      pBirthdate.textContent = candidate.dataNascimento;
+
+      li.appendChild(pName);
+      li.appendChild(pBirthdate);
+
+      UlJobApplicants.appendChild(li);
+    });
+  });
 
 }
 
@@ -541,23 +539,16 @@ const cancelJobUser = async () => {
   }
 }
 
-const logout = () => {
-  user = {};
-  document.getElementById('home-worker').style.display = 'none';
-  document.getElementById('login').style.display = 'block';
-};
-
 //screen login
 
 const buttonLogin = document.getElementById("button-login")
 const inputLoginEmail = document.getElementById("input-login-email")
 const inputLoginPassword = document.getElementById("input-login-password")
-
 const notHasRegister = document.getElementById("not-has-register")
 const forgotPassword = document.getElementById("forgot-password")
 
 buttonLogin.addEventListener("click", signInSystem)
-notHasRegister.addEventListener("click", goScreenRegisterUser )
+notHasRegister.addEventListener("click", event => goForScreen("login", "register-user", event))
 forgotPassword.addEventListener("click", recoverPassword)
 
 //screen register user
@@ -566,12 +557,41 @@ const buttonBackLogin = document.getElementById("back-screen-login")
 const buttonRegisterNewUser = document.getElementById("register-new-user")
 const inputDateBirth = document.getElementById("register-user-date")
 
-buttonBackLogin.addEventListener("click", backForScreenLogin)
+buttonBackLogin.addEventListener("click", event => goForScreen("register-user", "login", event))
 buttonRegisterNewUser.addEventListener("click", registerNewUser)
 inputDateBirth.addEventListener("keyup", addMaskForDate)
 
-//#endregion
+//screen home
 
-init();
-listJobs();
+const buttonGoScreenRegisterNewJob = document.getElementById('register-job-button')
+buttonGoScreenRegisterNewJob.addEventListener('click', event => goForScreen("home-worker", "register-job", event));
+
+const buttonLogoutUser = document.getElementById('logout-user')
+  buttonLogoutUser.addEventListener('click', logout);
+
+const buttonLogoutRecruiter = document.getElementById("logout-recruiter")
+buttonLogoutRecruiter.addEventListener("click", logout)
+
+//screen register job
+
+const buttonRegisterNewJob = document.getElementById('save-job')
+buttonRegisterNewJob.addEventListener('click', saveJob);
+
+const buttonBackToScreenHome = document.getElementById('back-to-job-home')
+buttonBackToScreenHome.addEventListener('click', event => goForScreen("register-job", "home-worker", event));
+
+
+//screen description job for user
+
+const buttonGoScreenHome = document.getElementById('job-description-back')
+buttonGoScreenHome.addEventListener('click', event => goForScreen("job-description-recruiter", "home-worker", event));
+
+const buttonApllyInJob = document.getElementById('register-job-user')
+buttonApllyInJob.addEventListener('click', registerUserJob);
+
+const buttonCancelAplly = document.getElementById('register-job-cancel')
+buttonCancelAplly.addEventListener('click', cancelJobUser);
+
+
+
 

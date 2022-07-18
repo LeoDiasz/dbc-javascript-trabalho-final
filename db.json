@@ -39,6 +39,13 @@
       "remuneracao": 1200,
       "candidatos": [],
       "id": 4
+    },
+    {
+      "titulo": "Andromeda",
+      "descricao": "ewew",
+      "remuneracao": 1200,
+      "candidatos": [],
+      "id": 5
     }
   ],
   "usuario": [
@@ -51,12 +58,14 @@
       "senha": "Leonardo123@"
     },
     {
-      "id": 2,
-      "nome": "marcos",
-      "tipo": "trabalhador",
-      "dataNascimento": "02/03/1996",
-      "email": "marcos@marcos.com",
-      "senha": "Marcos123@"
+      "tipo": "recrutador",
+      "nome": "andromeda",
+      "dataNascimento": "2001-05-05T03:00:00.000Z",
+      "candidaturas": [],
+      "email": "leonardoduarte@hotmail.com",
+      "senha": "Leo040446@",
+      "id": 2
     }
+    
   ]
 }
