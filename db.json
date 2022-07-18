@@ -4,8 +4,49 @@
       "titulo": "Estagio",
       "descricao": "Programação",
       "remuneracao": "R$ 1500",
-      "candidatos": [],
+      "candidatos": [
+        {
+          "idVaga": 1,
+          "idCandidato": 3,
+          "reprovado": true
+        }
+      ],
       "id": 1
+    },
+    {
+      "titulo": "Front end",
+      "descricao": "Sites",
+      "remuneracao": "R$ 2000",
+      "candidatos": [],
+      "id": 2
+    },
+    {
+      "titulo": "Back end",
+      "descricao": "Java",
+      "remuneracao": "R$ 2500",
+      "candidatos": [],
+      "id": 3
+    },
+    {
+      "titulo": "Suporte TI",
+      "descricao": "redes",
+      "remuneracao": "R$ 1200",
+      "candidatos": [],
+      "id": 4
+    },
+    {
+      "titulo": "IA",
+      "descricao": "IA",
+      "remuneracao": "R$ 2000",
+      "candidatos": [],
+      "id": 5
+    },
+    {
+      "titulo": "Estagio",
+      "descricao": "Estagio",
+      "remuneracao": "R$ 800",
+      "candidatos": [],
+      "id": 6
     }
   ],
   "usuario": [

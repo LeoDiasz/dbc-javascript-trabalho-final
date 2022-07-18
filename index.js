@@ -17,7 +17,6 @@ class Usuario {
 }
 
 class Vaga {
-  id;
   titulo;
   descricao;
   remuneracao;
@@ -219,7 +218,7 @@ const signInSystem = async (event) => {
     showListJobs()
 
   }catch(Error) {
-    console.log("Erro ao realizar login")
+    alert("Erro ao realizar login")
   }
 
   clearInputs(inputLoginEmail.id, inputLoginPassword.id)
@@ -325,7 +324,6 @@ const registerNewUser = async (event) => {
     return
   }
   
-
 }
 
 const backForScreenLogin = (event) => {
@@ -379,8 +377,7 @@ const saveJob = async (event) => {
     await api.post('/jobs', newJob);
 
     alert("Vaga cadastrada com sucesso")
-    clearInputs("input-title", "input-salary", "input-description")
-    goForScreen("register-job", "home-worker")
+    backForHome()
     showListJobs();
     return
     
@@ -503,7 +500,7 @@ const createElementCandidatureInJob = async (worker, jobId) => {
     pBirthdate.textContent = dateFormat
     buttonReprove.textContent = "Reprovar"
     buttonReprove.classList.add("button-reprove")
-    buttonReprove.addEventListener("click", event => reproveWorkerInJob(jobId, worker))
+    buttonReprove.addEventListener("click", event => reproveWorkerInJob(jobId, worker, event))
   
     if(worker.reprovado && isCandidate && user.tipo == "trabalhador"){
       pName.style.color = "red"
@@ -537,6 +534,8 @@ const createElementCandidatureInJob = async (worker, jobId) => {
 const goToJobDescriptionPage = async (jobId, event) => {
   event.preventDefault()
 
+  const listCandidature = document.getElementById("list-candidature")
+  listCandidature.textContent = ""
 
   const {data:dataJob} = await api.get(`jobs/${jobId}`)
 
@@ -668,6 +667,7 @@ const deleteRoomJob = async (jobId, event) => {
 }
 
 const reproveWorkerInJob = async (jobId, worker, event) => {
+  event.preventDefault()
 
   const isConfirm = confirm("Você tem certeza que deseja reprovar o candidato?")
   
@@ -694,7 +694,14 @@ const reproveWorkerInJob = async (jobId, worker, event) => {
     return
   }
 
-} 
+}
+
+const goForHomeFromDescription = (event) => {
+  event.preventDefault()
+  goForScreen("job-description", "home-worker")
+  showListJobs()
+}
+
 //#endregion
 
 
@@ -742,7 +749,7 @@ buttonBackToScreenHome.addEventListener('click', backForHome);
 //screen description 
 
 const buttonGoScreenHome = document.getElementById('job-description-back')
-buttonGoScreenHome.addEventListener('click', event => goForScreen("job-description", "home-worker", event));
+buttonGoScreenHome.addEventListener('click', goForHomeFromDescription);
 
 
 
